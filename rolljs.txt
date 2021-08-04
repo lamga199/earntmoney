@@ -1,0 +1,164 @@
+<!--https://javascriptobfuscator.com/-->
+var isPercentage = true;
+      var prizes = [
+              {
+                text: "Up 5% attendance",
+			
+                number: 1, // 1%,
+                percentpage: 0.10 // 10%
+              },
+              {
+                text: "Up 10% attendance",
+				
+                number: 2,
+                percentpage: 0.12 // 12%
+              },
+              {
+                text: "Good luck",
+               
+                number : 3,
+                percentpage: 0.3 // 30%
+              },
+              {
+                text: "Card mobile 1K",
+               
+                number: 4,
+                percentpage: 0.22 // 22%
+              },
+              {
+                text: "Card mobile 10K",
+              number: 5,
+                percentpage: 0.15 // 15%
+              },
+			  {
+                text: "Card mobile 50K",
+              number: 6,
+                percentpage: 0.10 // 10%
+              },
+			  {
+                text: "Card mobile 100K",
+              number: 7,
+                percentpage: 0.06 // 6%
+              },
+            ];
+      document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+          hcLuckywheel.init({
+            id: "luckywheel",
+            config: function(callback) {
+              callback &&
+                callback(prizes);
+            },
+            mode : "both",
+            getPrize: function(callback) {
+              var rand = randomIndex(prizes);
+              var chances = rand;
+              callback && callback([rand, chances]);
+            },
+            gotBack: function(data) {
+				if(data == 'Card mobile 1K'){
+					$.get("getroll.php?id=1").done(function(json){});
+				}
+				if(data == 'Up 5% attendance'){
+					$.get("getroll.php?id=2").done(function(json){});
+				}
+				if(data == 'Up 10% attendance'){
+					$.get("getroll.php?id=3").done(function(json){});
+				}
+				if(data == 'Card mobile 10K'){
+					$.get("getroll.php?id=4").done(function(json){});
+				}
+				if(data == 'Card mobile 50K'){
+					$.get("getroll.php?id=5").done(function(json){});
+				}
+				if(data == 'Card mobile 100K'){
+					$.get("getroll.php?id=6").done(function(json){});
+				}
+				if(data == 'Good luck'){
+					$.get("getroll.php?id=7").done(function(json){});
+				}
+              if(data == null){
+                Swal.fire(
+                  'Event closed',
+                  'Over gifts',
+                  'error'
+                )
+              } else if (data == 'Good luck'){
+                Swal.fire(
+                  'Goodluck to you',
+                  data,
+                  'error'
+                )
+              } else{
+                Swal.fire(
+                  'WIN',
+                  data,
+                  'success'
+                )
+              }
+			  setTimeout(function() {
+  document.location="/roll.php";
+}, 1000);
+			  
+            }
+          });
+        },
+        false
+      );
+      function randomIndex(prizes){
+        if(isPercentage){
+          var counter = 1;
+          for (let i = 0; i < prizes.length; i++) {
+            if(prizes[i].number == 0){
+              counter++
+            }
+          }
+          if(counter == prizes.length){
+            return null
+          }
+          let rand = Math.random();
+          let prizeIndex = null;
+          console.log(rand);
+          switch (true) {
+            case rand < prizes[4].percentpage:
+              prizeIndex = 4 ;
+              break;
+            case rand < prizes[4].percentpage + prizes[3].percentpage:
+              prizeIndex = 3;
+              break;
+            case rand < prizes[4].percentpage + prizes[3].percentpage + prizes[2].percentpage:
+              prizeIndex = 2;
+              break;
+            case rand < prizes[4].percentpage + prizes[3].percentpage + prizes[2].percentpage + prizes[1].percentpage:
+              prizeIndex = 1;
+              break;  
+            case rand < prizes[4].percentpage + prizes[3].percentpage + prizes[2].percentpage + prizes[1].percentpage  + prizes[0].percentpage:
+              prizeIndex = 0;
+              break;  
+          }
+          if(prizes[prizeIndex].number != 0){
+            prizes[prizeIndex].number = prizes[prizeIndex].number - 1
+            return prizeIndex
+          }else{
+            return randomIndex(prizes)
+          }
+        }else{
+          var counter = 0;
+          for (let i = 0; i < prizes.length; i++) {
+            if(prizes[i].number == 0){
+              counter++
+            }
+          }
+          if(counter == prizes.length){
+            return null
+          }
+          var rand = (Math.random() * (prizes.length)) >>> 0;
+          if(prizes[rand].number != 0){
+            prizes[rand].number = prizes[rand].number - 1
+            return rand
+          }else{
+            return randomIndex(prizes)
+          }
+        }
+      }

@@ -1,0 +1,76 @@
+var money =<? echo $vid['cash'];?>;
+ var dorun=0;
+ var duration=<? echo $vid['long'];?>;
+ var doend=0;
+ var myinterval;
+ function onYouTubeIframeAPIReady() {
+    player = new YT.Player('video-placeholder', {
+        height: 315,
+        videoId: <?php echo "'".$vid['vidid']."'"; ?>,
+        playerVars: {
+         color: 'white',
+         controls: '0',
+         autoplay: '1',
+         disablekb:'1',
+         rel:      '0'
+        },
+        events: {
+            'onReady': initialize,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+ }
+
+ function initialize(){
+     // Обновляем элементы управления и загружаем
+    updateTimerDisplay();
+    updateProgressBar();
+
+    // Сброс старого интервала
+    clearInterval(time_update_interval);
+
+    // Запускаем обновление таймера и дорожки проигрывания
+    // каждую секунду.
+    time_update_interval = setInterval(function () {
+        updateTimerDisplay();
+        updateProgressBar();
+    }, 1000)
+
+ }
+
+
+ function startvideo(){
+  player.playVideo();
+ }
+
+ function decduration(){
+  duration=duration-1;
+  document.getElementById("playbtn").innerHTML="<font style='color:yellow;font-weight:;'>It remains to view "+duration+" seconds</font>";
+  if (duration<=0){
+   doend=1;
+   clearInterval(myinterval);
+   document.getElementById("playbtn").innerHTML="<input type='button' class='cmt-to-login' value='GET CASH' onClick='javascript:addmoney()'>";
+   return false;
+  }
+ }
+
+ function onPlayerStateChange(event) {
+	 var videoid = <?php echo $vid['id'];?>;
+  if ((event.data==YT.PlayerState.PLAYING)&&(dorun==0)){
+   dorun=1;
+   myinterval=setInterval(decduration,1000);
+   $.get("startvideo.php?id="+videoid+"").done(function(json){
+   });
+  }
+  if (event.data==YT.PlayerState.PAUSED){
+   alert("Cannot pause video while watching!");
+   document.location="/";
+   return false;
+  }
+ }
+
+
+ function addmoney(){
+	 var videoid = <?php echo $vid['id'];?>;
+  document.location="getcash.php?id="+videoid+"";
+ }

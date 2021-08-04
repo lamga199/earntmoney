@@ -1,0 +1,115 @@
+
+
+<table width="810" border="0" align="center" bgcolor="white">
+ <tr>
+  <td align="center">
+    <font style="font-size:24px;font-weight:bold;color:green;">True Wireless Earbuds Under 2000| Best Budget Earbuds (2019)</font>
+  </td>
+ </tr>
+ <tr>
+  <td align="center">
+    <font style="font-size:18px;font-weight:bold;color:blue;">Viewing cost <font color="red">$ 2.50</font></font>
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <div id="video-placeholder">
+    <iframe width="800" height="450" src="https://www.youtube.com/embed/MLDvpRtdDjQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+   </div>
+  </td>
+ </tr>
+ <tr>
+  <td>&nbsp;
+   
+  </td>
+ </tr>
+ <tr>
+  <td align="center">
+    <div id="playbtn" style="visibility:visible;"><input type="button" style="width:250px;height:40px;font-size:22px;font-weight:bold;" value="START VIEWING" onClick="javascript:startvideo()"></div>
+  </td>
+ </tr>
+
+</table>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+ var dorun=0;
+ var duration=296;
+ var doend=0;
+ var myinterval;
+ function onYouTubeIframeAPIReady() {
+    player = new YT.Player('video-placeholder', {
+        width: 800,
+        height: 450,
+        videoId: 'MLDvpRtdDjQ',
+        playerVars: {
+         color: 'white',
+         controls: '0',
+         autoplay: '1',
+         disablekb:'1',
+         rel:      '0'
+        },
+        events: {
+            'onReady': initialize,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+ }
+
+ function initialize(){
+     // Обновляем элементы управления и загружаем
+    updateTimerDisplay();
+    updateProgressBar();
+
+    // Сброс старого интервала
+    clearInterval(time_update_interval);
+
+    // Запускаем обновление таймера и дорожки проигрывания
+    // каждую секунду.
+    time_update_interval = setInterval(function () {
+        updateTimerDisplay();
+        updateProgressBar();
+    }, 1000)
+
+ }
+
+
+ function startvideo(){
+  player.playVideo();
+ }
+
+ function decduration(){
+  duration=duration-1;
+  document.getElementById("playbtn").innerHTML="<font style='font-size:28px;color:blue;font-weight:bold;'>It remains to view "+duration+" seconds</font>";
+  if (duration<=0){
+   doend=1;
+   clearInterval(myinterval);
+   document.getElementById("playbtn").innerHTML="<input type='button' style='width:250px;height:40px;font-size:22px;font-weight:bold;' value='ENROLL $ 2.50' onClick='javascript:addmoney()'>";
+   return false;
+  }
+ }
+
+ function onPlayerStateChange(event) {
+  if ((event.data==YT.PlayerState.PLAYING)&&(dorun==0)){
+   dorun=1;
+   myinterval=setInterval(decduration,1000);
+   $.get("startshow.php?vid=762").done(function(json){
+   });
+  }
+  if (event.data==YT.PlayerState.PAUSED){
+   alert("Cannot pause video while watching!");
+   document.location="/";
+   return false;
+  }
+ }
+
+
+ function addmoney(){
+  document.location="addmoney.php?vid=762";
+ }
+</script>
+
+
+
+
+</body>

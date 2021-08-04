@@ -1,0 +1,317 @@
+<?php
+define('_IN_JOHNCMS', 1);
+$headmod = 'ruttien';
+$textl='Rút tiền';
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+require('incfiles/core.php');
+require('incfiles/head.php');
+
+if(empty($login)) {
+header('location: /index.php');
+} else { ?>
+
+<div class="main" style="width:640px;max-width:100%;margin:auto">
+
+<div style="background:#fff">
+<?php require('uinfo.php');?>
+</div>
+<?php require('topmenu.php');?>
+<blockquote class="blockquote">
+  <p class="mb-0" style="color:orange">Rút tiền thưởng điểm danh về tài khoản chính</p>
+  <!--<footer class="blockquote-footer">Mức độ tiền danh đạt yêu cầu: <?echo $usermain['countdd'];?>/<? echo $set['daydiemdanhduocrut'];?></footer>-->
+</blockquote>
+<div class="text-warning"><i class="fa fa-money" aria-hidden="true"></i> Tiền thưởng có thể rút: <? echo number_format($usermain['coin_bonus']);?> <? echo $set['donvi'];?></div>
+<!--<div class="text-danger"><i class="fa fa-money" aria-hidden="true"></i> tiền khóa: <? echo number_format($usermain['coin_lock']);?> <? echo $set['donvi'];?></div>-->
+
+<?php 
+if(isset($_POST['submitcoinbonus'])) {
+	$coinbonus=isset($_POST['coinbonus']) ? abs(intval($_POST['coinbonus'])) : 0;
+	if($coinbonus==0) {
+		$error[]='Chưa nhập số tiền muốn rút';
+	}
+	if($coinbonus<0) {
+		$error[]='Cảnh cáo nhập sai, sẽ khóa tài khoản nếu cố tình vi phạm';
+	}
+	if($coinbonus>$usermain['coin_bonus']) {
+		$error[]='Số tiền bạn muốn rút vượt quá số tiền bạn đang có';
+	}
+	if($coinbonus<50000) {
+		$error[]='Tối thiểu phải là 50,000 tiền';
+	}
+
+	if(empty($error)) {
+		// reset số lần tiền danh về 0, trừ số tiền bonus, cộng số tiền chính
+		mysql_query("UPDATE users SET
+		coin_bonus = coin_bonus - '".$coinbonus."',
+		coin = coin + '".$coinbonus."',
+		totalchuyen = totalchuyen + '".$coinbonus."',
+		rutcoinbonusdone  = rutcoinbonusdone + 1
+		WHERE
+		id = '".$user_id."'
+		");
+		// cập nhật log cho user
+		mysql_query("INSERT INTO log SET
+		time = '".time()."',
+		act = 'rut coin bonus',
+		idtacdong = '".$user_id."',
+		box = '".$user_id."',
+		coin_bonus_minus = '".$coinbonus."',
+		coin_add = '".$coinbonus."',
+		log = 'ID: $user_id thực hiện rút tiền thưởng điểm danh về tiền chính, coinbonus - ".number_format($coinbonus).", coin + ".number_format($coinbonus).", add log'
+		");
+			// báo mail cho user
+			$mail = $usermain['mail'];
+			$subject = "Earnmoney rút tiền thưởng điểm danh về tiền chính";
+			$message = "Tài khoản ".$user_id." của bạn đã rút ".number_format($coinbonus)."  ". $set['donvi']."  tiền thưởng điểm danh về tài khoản tiền chính Earnmoney!";
+			$header  =  "From:support@earntmoney.com \r\n";
+			$header .=  "Cc:support@earntmoney.com \r\n";
+			$success = mail ($mail,$subject,$message,$header);
+				?>
+		<div class="alert alert-success" role="alert">
+		Rút <? echo number_format($coinbonus);?> <? echo $set['donvi'];?> về tài khoản chính thành công!
+		</div>
+		 	<div><span class="text-muted"><a href="/yeucau.php" class="btn btn-primary"><i class="fa fa-retweet" aria-hidden="true"></i> Tiếp tục</a></span></div>
+		<?
+	} else {
+		?>
+		<div class="alert alert-danger" role="alert">
+		<?php echo functions::display_error($error); ?>
+		</div>
+		 <div><span class="text-muted"><a href="/yeucau.php" class="btn btn-primary"><i class="fa fa-retweet" aria-hidden="true"></i> Thử lại</a></span></div>
+		<?
+	}
+} else {
+
+?>
+<h5>Nhập số tiền thưởng muốn rút <i class="text-muted" style="font-size:14px;">(Tối thiểu 50,000)</i></h5>
+<form class="btn-group" method="post">
+<input class="form-control" type="number" name="coinbonus" value="0" placeholder=""/>
+<input class="btn btn-warning" type="submit" name="submitcoinbonus" style="width:100px;;" value="Rút tiền"/>
+</form>
+<? } ?>
+</div>
+<div>
+
+<br><br>
+<blockquote class="blockquote">
+  <p class="mb-0" style="color:#FE7C44">Rút tiền nhận thưởng ngày về tài khoản chính</p>
+  <!--<footer class="blockquote-footer">Mức độ tiền danh đạt yêu cầu: <?echo $usermain['countdd'];?>/<? echo $set['daydiemdanhduocrut'];?></footer>-->
+</blockquote>
+<div class="" style="color:#FE7C44"><i class="fa fa-money" aria-hidden="true"></i> Tiền thưởng có thể rút: <? echo number_format($usermain['coinday']);?> <? echo $set['donvi'];?></div>
+<!--<div class="text-danger"><i class="fa fa-money" aria-hidden="true"></i> tiền khóa: <? echo number_format($usermain['coin_lock']);?> <? echo $set['donvi'];?></div>-->
+
+<?php 
+if(isset($_POST['submitcoinday'])) {
+	$coinday=isset($_POST['coinday']) ? abs(intval($_POST['coinday'])) : 0;
+	if($coinday==0) {
+		$error[]='Chưa nhập số tiền muốn rút';
+	}
+	if($coinday<0) {
+		$error[]='Cảnh cáo nhập sai, sẽ khóa tài khoản nếu cố tình vi phạm';
+	}
+	if($coinday>$usermain['coinday']) {
+		$error[]='Số tiền bạn muốn rút vượt quá số tiền bạn đang có';
+	}
+	if($coinday<50000) {
+		$error[]='Tối thiểu phải là 50,000 tiền';
+	}
+
+	if(empty($error)) {
+		// reset số lần tiền danh về 0, trừ số tiền bonus, cộng số tiền chính
+		mysql_query("UPDATE users SET
+		coinday = coinday - '".$coinday."',
+		coin = coin + '".$coinday."',
+		totalchuyen = totalchuyen + '".$coinday."',
+		rutcoinbonusdone  = rutcoinbonusdone + 1
+		WHERE
+		id = '".$user_id."'
+		");
+		// cập nhật log cho user
+		mysql_query("INSERT INTO log SET
+		time = '".time()."',
+		act = 'rut coin diem danh',
+		idtacdong = '".$user_id."',
+		box = '".$user_id."',
+		coin_bonus_minus = '".$coinday."',
+		coin_add = '".$coinday."',
+		log = 'ID: $user_id thực hiện rút tiền nhận thưởng ngày về tiền chính, coinday - ".number_format($coinday).", coin + ".number_format($coinday).", add log'
+		");
+			// báo mail cho user
+			$mail = $usermain['mail'];
+			$subject = "Earnmoney rút tiền nhận thưởng ngày về tiền chính";
+			$message = "Tài khoản ".$user_id." của bạn đã rút ".number_format($coinday)." ". $set['donvi']." tiền nhận thưởng ngày về tài khoản tiền chính Earnmoney!";
+			$header  =  "From:support@earntmoney.com \r\n";
+			$header .=  "Cc:support@earntmoney.com \r\n";
+			$success = mail ($mail,$subject,$message,$header);
+				?>
+		<div class="alert alert-success" role="alert">
+		Rút <? echo number_format($coinday);?> <? echo $set['donvi'];?> về tài khoản chính thành công!
+		</div>
+		<div><span class="text-muted"><a href="/yeucau.php" class="btn btn-primary"><i class="fa fa-retweet" aria-hidden="true"></i> Tiếp tục</a></span></div>
+		 
+		<?
+	} else {
+		?>
+		<div class="alert alert-danger" role="alert">
+		<?php echo functions::display_error($error); ?>
+		</div>
+		 <div><span class="text-muted"><a href="/yeucau.php" class="btn btn-primary"><i class="fa fa-retweet" aria-hidden="true"></i> Thử lại</a></span></div>
+		<?
+	}
+} else {
+
+?>
+<h5>Nhập số tiền thưởng muốn rút <i class="text-muted" style="font-size:14px;">(Tối thiểu 50,000)</i></h5>
+<form class="btn-group" method="post">
+<input class="form-control" type="number" name="coinday" value="0" placeholder=""/>
+<input class="btn btn-success" type="submit" name="submitcoinday" style="background:#FE7C44;width:100px;;" value="Rút tiền"/>
+</form>
+<? } ?>
+</div>
+<div>
+
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2 text-success">Yêu cầu rút tiền về tài khoản</h1>
+        
+      </div>
+	 <blockquote class="blockquote">
+  <p class="mb-0">Thời gian yêu cầu rút từ 20:00-21:59 hàng ngày - trừ Chủ Nhật</p>
+  <footer class="blockquote-footer">Thời gian để chờ xử lý yêu cầu có thể từ 2 giờ đến tối đa 24 giờ</footer>
+</blockquote>
+<div class="text-success"><i class="fa fa-money" aria-hidden="true"></i> Tiền hiện có: <? echo number_format($usermain['coin']);?> <? echo $set['donvi'];?></div>
+<br>
+<? 
+if(isset($_POST['rutcoin'])) {
+$code=isset($_POST['code']) ? abs(intval($_POST['code'])) : 0;
+$coin=isset($_POST['coin']) ? abs(intval($_POST['coin'])) : 0;
+	if($coin==0) {
+		$error[]='Chưa nhập số tiền muốn rút';
+	}
+	if($coin<0) {
+		$error[]='Cảnh cáo nhập sai, sẽ khóa tài khoản nếu cố tình vi phạm';
+	}
+	if($coin>$usermain['coin']) {
+		$error[]='Số tiền bạn muốn rút vượt quá số tiền bạn đang có';
+	}
+	if($usermain['changebank']==0) {
+		$error[]='Chưa có thông tin ngân hàng, hãy cập nhật thông tin';
+	}
+	if($coin<50000) {
+		$error[]='Tối thiểu phải là 50,000 tiền';
+	}
+	if(date("H",time()+$set['timeshift']*3600)<20 && date("H",time()+$set['timeshift']*3600)>21 || strtolower(date("l"))=='sunday') {
+		$error[]='Chỉ được yêu cầu rút trong thời gian 20:00 - 21:59 hàng ngày, trừ chủ nhật';
+	}
+	if($usermain['status']=='pending' || $usermain['status']=='banned' || $user_id==$set['admin_nhan_coin']) {
+		$error[]='Tài khoản bị cấm thực hiện hoạt động này';
+	}
+	if($countcheck=mysql_result(mysql_query("SELECT COUNT(*) FROM yeucaurut WHERE user = '".$user_id."' AND status = 'pending'"),0)>0) {
+		$error[]='Bạn đang có 1 yêu cầu thanh toán trước đó chưa được xử lý. Vui lòng chờ thêm!';
+	}
+	if($code!=$usermain['coderut']) {
+		$error[]='Mã xác thực không đúng';
+	}
+	if($code==$usermain['coderut'] && time()>$usermain['timecoderut']) {
+		$error[]='Mã xác thực đã hết hạn';
+	}
+	if(empty($error)) {
+		// cộng số yêu cầu rút tiền + 1 (yeucaurutcount + 1), code reset, time code reset
+		mysql_query("UPDATE users SET
+		yeucaurutcount = yeucaurutcount + 1,
+		coderut = '',
+		timecoderut = ''
+		WHERE
+		id = '".$user_id."'
+		");
+		// cập nhật log cho user
+		mysql_query("INSERT INTO log SET
+		time = '".time()."',
+		act = 'yeu cau rut coin',
+		idtacdong = '".$user_id."',
+		box = '".$user_id."',
+		coin_minus = '".$coin."',
+		log = 'ID: $user_id yeu cau rut coin_minus = ".number_format($coin).", yeucaurutcount + 1 cho $user_id'
+		");
+		// gửi thông tin yêu cầu rút đến admin
+		mysql_query("INSERT INTO yeucaurut SET 
+		user = '".$user_id."',
+		admin = '".$set['admin_nhan_coin']."',
+		coin = '".$coin."',
+		coin_old = '".$usermain['coin']."',
+		bank = '".$usermain['bank']."',
+		namebank = '".$usermain['namebank']."',
+		stk = '".$usermain['stk']."',
+		status = 'pending',
+		time = '".time()."',
+		timedone = '0',
+		admin_duyet = '0'");
+			// báo mail cho user
+			$mail = $usermain['mail'];
+			$subject = "Earnmoney gửi yêu cầu rút tiền thành công";
+			$message = "Tài khoản ".$user_id." của bạn đã gửi yêu cầu rút ".number_format($coin)." ".$set['donvi']." về tài khoản ngân hàng thành công trên Earnmoney!. Vui lòng chờ từ 2 giờ -  24 giờ để admin xử lý.";
+			$header  =  "From:support@earntmoney.com \r\n";
+			$header .=  "Cc:support@earntmoney.com \r\n";
+			$success = mail ($mail,$subject,$message,$header);
+			?>
+			
+			<div class="alert alert-success" role="alert">
+		Đã gửi yêu cầu rút tiền thành công. Vui lòng chờ từ 2 giờ -  24 giờ để admin xử lý!.
+		</div>
+			<?
+	} else {
+		
+		?>
+		<div class="alert alert-danger" role="alert">
+		<?php echo functions::display_error($error); ?>
+		</div>
+		 <div><span class="text-muted"><a href="/yeucau.php" class="btn btn-primary"><i class="fa fa-retweet" aria-hidden="true"></i> Thử lại</a></span></div>
+		<?
+	}
+} else {
+	if(date("H",time()+$set['timeshift']*3600)<20 && date("H",time()+$set['timeshift']*3600)>21 || strtolower(date("l"))=='sunday') {
+		?>
+		<div class="alert alert-danger" role="alert">
+		Bạn không thể rút tiền vào thời gian ngoài quy định!
+		</div>
+		<?
+		
+	} else {
+?>
+
+<h5>THÔNG TIN NGÂN HÀNG CỦA BẠN</h5>
+
+<?php if($usermain['changebank']>0) {?>
+<div><label>Tên ngân hàng</label>: <strong><?php echo $usermain['bank']; ?></strong></div>
+<div><label>Số tài khoản</label>: <strong><?php echo $usermain['stk']; ?></strong></div>
+<div><label>Họ tên chủ tài khoản</label>: <strong><?php echo $usermain['namebank']; ?></strong></div>
+<div><a class="btn btn-primary" href="/report.php?act=changebank">Đổi thông tin ngân hàng</a></div>
+<?php } else { ?>
+<div class="text-danger">Tài khoản chưa có thông tin ngân hàng để nhận tiền rút.</div>
+<div><a class="btn btn-primary" href="/account.php">Cập nhật thông tin ngân hàng</a></div>
+<? } ?>
+<h5>Bước 1: Lấy mã xác thực OTP qua Email đăng ký.</h5>
+<div><a target="_blank" class="btn btn-primary" href="/getcoderut.php">Gửi mã<? echo $usermain[''];?></a></div>
+<div><i class="text-muted">Sau khi nhận được mã vui lòng nhập vào dưới đây, mã có thể sử dụng trong 5 phút.</i></div>
+<h5>Bước 2: Nhập mã xác thực và số tiền muốn rút <i class="text-muted" style="font-size:14px;">(Tối thiểu 50,000)</i></h5>
+<form class="btn-group" method="post">
+<input class="form-control" name="code" type="text" value="" placeholder="Mã OTP"/>
+<input class="form-control" name="coin" type="number" value="0" placeholder=""/>
+<input class="btn btn-success" type="submit" name="rutcoin" style="width:120px;;" value="Gửi yêu cầu"/>
+</form> 
+<? }} ?>
+</div><br>
+<br>
+    <div><i class="text-muted">Các thông tin mặc định không thể thay đổi, mọi ý kiến vui lòng report đến admin qua <a href="/report.php">report page</a></i></div>
+      </div>
+	  
+    </main>
+  
+</div>	 
+</div>	 	 
+	<div style="padding-bottom:50px;" class="float-right"></div>
+</body>
+<? require('footer.php');?>
+</html>	
+<?php } ?>

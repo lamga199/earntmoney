@@ -1,0 +1,29 @@
+[29-Dec-2020 03:27:15 UTC] PHP Warning:  require(../../librarys/phpmailer/PHPMailerAutoload.php): failed to open stream: No such file or directory in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 2
+[29-Dec-2020 03:27:15 UTC] PHP Fatal error:  require(): Failed opening required '../../librarys/phpmailer/PHPMailerAutoload.php' (include_path='.:/opt/alt/php56/usr/share/pear:/opt/alt/php56/usr/share/php') in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 2
+[29-Dec-2020 03:53:48 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 3
+[29-Dec-2020 03:53:50 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 3
+[29-Dec-2020 03:54:21 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 3
+[29-Dec-2020 03:54:30 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 4
+[29-Dec-2020 03:54:31 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 4
+[29-Dec-2020 03:54:33 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 4
+[29-Dec-2020 03:54:43 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 5
+[29-Dec-2020 03:54:44 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 5
+[29-Dec-2020 03:54:44 UTC] PHP Parse error:  syntax error, unexpected ';' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 5
+[29-Dec-2020 03:57:08 UTC] PHP Warning:  Unterminated comment starting line 12 in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 12
+[29-Dec-2020 11:01:02 asia/ho_chi_minh] PHP Notice:  Undefined index: token in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 4
+[31-Dec-2020 09:31:54 UTC] PHP Parse error:  syntax error, unexpected ')' in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 15
+[31-Dec-2020 16:35:09 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:23 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:23 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:24 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:24 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:24 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:24 asia/ho_chi_minh] PHP Notice:  Object of class DateTime could not be converted to int in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:56 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:35:58 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:36:05 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:36:06 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:37:10 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:37:11 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:37:11 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
+[31-Dec-2020 16:37:35 asia/ho_chi_minh] PHP Catchable fatal error:  Object of class DateTime could not be converted to string in /home/rul59gyr3r7b/public_html/cronjob/test_cronjob.php on line 20
