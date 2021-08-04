@@ -1,0 +1,2 @@
+ git push -u --repo=https://github.com/lamga199/earntmoney.git
+ git push origin master
